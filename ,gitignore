@@ -1,9 +1,0 @@
-.DS_Store
-node_modules/
-logs/
-*.log
-!example.log
-!logs/example.log
-# macOS Files
-.DS_Store
-
