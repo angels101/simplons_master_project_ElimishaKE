@@ -29,14 +29,14 @@ SECRET_KEY = '%11jhs^@i=r6mqha16jx_96=j8i%-$(zf_@18i%p_p^^*e&5=8'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1']
+ALLOWED_HOSTS = []
 
 
 # Application definition
 
 INSTALLED_APPS = [
     #'news',
-    'bootstrap4',
+    'bootstrap3',
     'news.apps.NewsConfig',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -44,13 +44,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'tinymce',
 ]
-# Email configurations remember to install python-decouple
-EMAIL_USE_TLS = config('EMAIL_USE_TLS')
-EMAIL_HOST = config('EMAIL_HOST')
-EMAIL_PORT = config('EMAIL_PORT')
-EMAIL_HOST_USER = config('EMAIL_HOST_USER')
-EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
 
 
 
@@ -147,3 +142,12 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static",)
 ]
 
+# Email configurations remember to install python-decouple
+EMAIL_USE_TLS = config('EMAIL_USE_TLS')
+EMAIL_HOST = config('EMAIL_HOST')
+EMAIL_PORT = config('EMAIL_PORT')
+EMAIL_HOST_USER = config('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
+
+LOGOUT_REDIRECT_URL = '/'
+LOGIN_REDIRECT_URL = '/' 
