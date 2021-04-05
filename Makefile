@@ -1,5 +1,5 @@
 serve:
-		python3 manage.py runserver
+		py manage.py runserver
 test:
 		python3 manage.py run test photos
 migrate:
