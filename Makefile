@@ -1,5 +1,5 @@
 serve:
-		py manage.py runserver
+		python3 manage.py runserver
 test:
 		python3 manage.py run test photos
 migrate:
@@ -8,3 +8,10 @@ makemigrations:
 		python3 manage.py makemigrations
 createsuperuser:
 		python3 manage.py createsuperuser
+activate:
+		source env/bin/activate
+build:
+	python3 manage.py build
+
+
+

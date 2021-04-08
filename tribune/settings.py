@@ -16,6 +16,23 @@ import django_heroku
 import dj_database_url
 from decouple import config
 from backports import csv
+import psycopg
+
+# Connect to your postgres DB
+conn = psycopg.connect("dbname=test user=postgres")
+
+# Open a cursor to perform database operations
+cur = conn.cursor()
+
+# Execute a query
+cur.execute("SELECT * FROM my_data")
+
+# Retrieve query results
+records = cur.fetchall()
+
+
+
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
