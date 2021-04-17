@@ -2,8 +2,15 @@ from django.shortcuts import render,redirect
 from django.http import HttpResponse, Http404, HttpResponseRedirect
 import datetime as dt
 from news.models import Article
-from .forms import NewsLetterForms,NewArticleForm
+from . forms import NewsLetterForms,NewArticleForm
 from django.contrib.auth.decorators import login_required
+from . email import send_welcome_email
+from rest_framework.response import Response
+from rest_framework.views import APIView
+from . models import ElimishaMerch
+from . serializer import MerchSerializer, IsAdminOrReadOnly
+from . permissions import IsAdminOrReadOnly
+
 
 # Create your views here.
 def welcome(request):
@@ -67,7 +74,7 @@ def search_results(request):
         return render(request, 'all-news/search.html',{"message":message})
 
 @login_required(login_url='/accounts/login/')
-def new_article(request):
+def new_article(request,article_id):
     current_user = request.user
     if request.method == 'POST':
         form = NewArticleForm(request.POST, request.FILES)
@@ -111,3 +118,44 @@ def newsletter(request):
     send_welcome_email(name, email)
     data = {'success': 'You have been successfully added to mailing list'}
     return JsonResponse(data)
+
+class MerchList(APIView):
+    def get(self, request, format=none):
+        all_merch = ElimishaMerch.objects.all()
+        serializers = MerchSerializer(all_merch,many=True)
+        permission_classes = (IsAdminOrReadOnly,)
+        return Response(serializers.data)     
+
+    def post(self, request, format=None):
+        serializers = MerchSerializer(data=request.data)
+        permission_classes = (IsAdminOrReadOnly)
+        if serializers.is_valid():
+            serializers.save()
+            return Response(serializers.data, status=status.HTTP_201_CREATED)
+        return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
+class MerchDescription(APIView):
+    permission_classes = (IsAdminOrReadOnly)
+    def get_merch(self, pk):
+        try:
+            return ElimishaMerch.objects.get(pk=pk)
+        except ElimishaMerch.DoesNotExist:
+            return Http404
+
+    def get(self,request,pk, format=none):
+        merch = self.get_merch(pk)
+        serializers = MerchSerializer(merch)
+        return Response(serializers.data)
+
+    def put(self, request, pk, format=None):
+        merch = self.get_merch(pk)
+        serializers = MerchSerializer(merch, request.data)
+        if serializers.is_valid():
+            serializers.save()
+            return Response(serializers.data)
+        else:
+            return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, pk, format=none):
+        merch = self.get_merch(pk)
+        merch.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
