@@ -1,4 +1,3 @@
-
 from news.models import Article
 from . import views
 from django.urls import path
@@ -14,6 +13,8 @@ urlpatterns = [
         #path('article/(\d+)', views.article, name='article'),
         path('new/article', views.new_article, name='new-article'),
         path('ajax/newsletter/', views.newsletter, name='newsletter'),
+        path('api/merch/', views.MerchList.as_view()),
+        path('api/merch/merch-id/(?p<pk>[0-9]+)/', views.MerchDescription.as_view()),
 ]
 
 if settings.DEBUG:
