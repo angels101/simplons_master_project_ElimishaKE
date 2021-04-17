@@ -17,16 +17,19 @@ from django.contrib import admin
 from django.urls import path,include
 from django.contrib.auth import views 
 from django_registration.backends.one_step.views import RegistrationView
-
+from rest_framework.authtoken.views import obtain_auth_token
 
 urlpatterns = [
         path('admin/', admin.site.urls),
-        path('',include('news.urls')),
+#        path('',include('news.urls')),
         path('accounts/register/',
         RegistrationView.as_view(success_url='/'),
         name='django_registration_register'),
         path('accounts/', include('django.contrib.auth.urls')),
         path('accounts/', include('django_registration.backends.one_step.urls')),
         path('tinymce/', include('tinymce.urls')), 
+        path('api-auth/', include('rest_framework.urls')),
+        path('logout/', views.LogoutView, {"next_page": '/'}),
+        path('api-token-auth/', obtain_auth_token)
 
 ]

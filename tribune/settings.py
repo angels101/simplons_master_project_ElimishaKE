@@ -11,24 +11,25 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 
 import os
+import io
 from pathlib import Path
 import django_heroku
 import dj_database_url
 from decouple import config
 from backports import csv
-import psycopg
+#import psycopg2
 
 # Connect to your postgres DB
-conn = psycopg.connect("dbname=test user=postgres")
+#conn = psycopg.connect("dbname=test user=postgres")
 
 # Open a cursor to perform database operations
-cur = conn.cursor()
+#cur = conn.cursor()
 
 # Execute a query
-cur.execute("SELECT * FROM my_data")
+#cur.execute("SELECT * FROM my_data")
 
 # Retrieve query results
-records = cur.fetchall()
+#records = cur.fetchall()
 
 
 
@@ -37,7 +38,13 @@ records = cur.fetchall()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
+REST_FRAMEWORK = {
+    # Use Django's standard `django.contrib.auth` permissions,
+    # or allow read-only access for unauthenticated users.
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+    ]
+}
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
@@ -53,6 +60,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'rest_framework.authtoken',
     'rest_framework',
     'bootstrap3',
     'news.apps.NewsConfig',
@@ -100,15 +108,17 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'tribune.wsgi.application'
 
-
+default_auto_field = 'django.db.models.AutoField'
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'tribune',
-        #'NAME': BASE_DIR / 'db.sqlite3',
+        'NAME': 'a1',
+        'USER': 'a1',
+        'PASSWORD':'root123',
+        
     }
 }
 
@@ -169,3 +179,11 @@ EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
 
 LOGOUT_REDIRECT_URL = '/'
 LOGIN_REDIRECT_URL = '/' 
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.TokenAuthentication',
+    )
+}
+
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
